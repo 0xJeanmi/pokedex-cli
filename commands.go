@@ -106,14 +106,14 @@ func commandExplore(params []string) error {
 		return fmt.Errorf("error getting Pokemon in area: %v", err)
 	}
 
-	results, ok := response["pokemon_encounters"].([]interface{})
+	results, ok := response["pokemon_encounters"].([]any)
 	if !ok || len(results) == 0 {
 		return fmt.Errorf("no Pokemon found in this area")
 	}
 
 	for _, el := range results {
-		if resultsMap, ok := el.(map[string]interface{}); ok {
-			if pokemonsMap, ok := resultsMap["pokemon"].(map[string]interface{}); ok {
+		if resultsMap, ok := el.(map[string]any); ok {
+			if pokemonsMap, ok := resultsMap["pokemon"].(map[string]any); ok {
 				if name, ok := pokemonsMap["name"].(string); ok {
 					fmt.Println("🐾 " + name)
 				}

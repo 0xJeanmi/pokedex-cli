@@ -91,12 +91,12 @@ type requestParams struct {
 
 var cache = pokecache.NewCache(5 * time.Minute)
 
-func httpRequest(params requestParams) (map[string]interface{}, error) {
+func httpRequest(params requestParams) (map[string]any, error) {
 	method := params.method
 	endpoint := "https://pokeapi.co/api/v2/" + params.endpoint + "?offset=" + strconv.Itoa(params.current) + "&limit=20"
 
 	if cachedData, found := cache.Get(endpoint); found {
-		var response map[string]interface{}
+		var response map[string]any
 		err := json.Unmarshal(cachedData, &response)
 		if err == nil {
 			return response, nil
@@ -123,7 +123,7 @@ func httpRequest(params requestParams) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	response := map[string]interface{}{}
+	response := map[string]any{}
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		return nil, err

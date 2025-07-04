@@ -65,20 +65,19 @@ func (c *Cache) reapLoop(interval time.Duration) {
 }
 
 type Pokemon struct {
-	Name	string
-	Xp		int
+	Name string
+	Xp   int
 }
 
-
 type Pokedex struct {
-	pokemons	map[string]Pokemon
-	lock		sync.RWMutex
+	pokemons map[string]Pokemon
+	lock     sync.RWMutex
 }
 
 func CreateNewPokedex() *Pokedex {
 	px := &Pokedex{
 		pokemons: make(map[string]Pokemon),
-		lock: sync.RWMutex{},
+		lock:     sync.RWMutex{},
 	}
 
 	return px
@@ -89,30 +88,26 @@ func (px *Pokedex) CapturePokemon(name string, exp int) {
 	px.lock.Lock()
 	defer px.lock.Unlock()
 
-
-	px.pokemons[name] = Pokemon {
+	px.pokemons[name] = Pokemon{
 		Name: name,
-		Xp: exp,
+		Xp:   exp,
 	}
 }
 
-func (px *Pokedex) GetPokemon(name string) (Pokemon, bool) {
-    px.lock.RLock()
-    defer px.lock.RUnlock()
-    
-    pokemon, exists := px.pokemons[name]
-    return pokemon, exists
+func (px Pokedex) GetPokemon(name string) (Pokemon, bool) {
+	pokemon, exists := px.pokemons[name]
+	return pokemon, exists
 }
 
-func (px *Pokedex) GetPokedex() ([]Pokemon, bool) {
-	
+func (px Pokedex) GetPokedex() ([]Pokemon, bool) {
+
 	if len(px.pokemons) == 0 {
 		return nil, false
 	}
-	
+
 	pokemons := []Pokemon{}
-	
-	for _, pokemon := range px.pokemons{
+
+	for _, pokemon := range px.pokemons {
 		pokemons = append(pokemons, pokemon)
 	}
 
